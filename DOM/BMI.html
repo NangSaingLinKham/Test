@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrast BMI Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .bmi-card {
+            background-color: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 440px;
+            padding: 3rem 2.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .bmi-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .bmi-title {
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+            margin-bottom: 2rem;
+        }
+
+        .input-group-custom {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            font-weight: 600;
+            color: #334155;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control {
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            color: #0f172a;
+            background-color: #f8fafc;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .form-control:focus {
+            background-color: #ffffff;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+            outline: none;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0.85rem;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .btn-calculate:hover {
+            background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+            color: white;
+            transform: scale(1.01);
+        }
+
+        .result-box {
+            background-color: #f1f5f9;
+            border-radius: 16px;
+            padding: 1.25rem;
+            margin-top: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .bmi-value-wrapper {
+            font-size: 1.1rem;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        #bmiResult {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0f172a;
+            display: block;
+            margin-top: 0.2rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 0.75rem;
+            background-color: #e2e8f0;
+            color: #475569;
+            transition: all 0.3s ease;
+        }
+
+        .status-underweight {
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+
+        .status-normal {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .status-overweight {
+            background-color: #ffedd5;
+            color: #c2410c;
+        }
+
+        .status-obese {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bmi-card">
+        <h2 class="bmi-title text-center">BMI Calculator</h2>
+
+        <form id="bmiForm" onsubmit="calculateBMI(event)">
+            <div class="input-group-custom">
+                <label for="weight">Weight (lb)</label>
+                <input type="number" step="any" id="weight" class="form-control" placeholder="Enter weight in lbs"
+                    required>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-6">
+                    <label for="feet">Height (feet)</label>
+                    <input type="number" id="feet" class="form-control" placeholder="Feet" required>
+                </div>
+                <div class="col-6">
+                    <label for="inches">Height (inches)</label>
+                    <input type="number" id="inches" class="form-control" placeholder="Inches" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-calculate w-100">Calculate BMI</button>
+        </form>
+
+        <div class="result-box text-center">
+            <div class="bmi-value-wrapper">
+                Your BMI
+                <span id="bmiResult">-</span>
+            </div>
+            <span id="statusResult" class="status-badge">Status: -</span>
+        </div>
+    </div>
+
+    <script>
+        function calculateBMI(event) {
+            event.preventDefault(); //Page Refreshမဖြစ်အောင်လုပ်ပေးတာ
+
+            const weight = parseFloat(document.getElementById('weight').value);
+            const feet = parseInt(document.getElementById('feet').value);
+            const inches = parseInt(document.getElementById('inches').value);
+
+            const totalInches = (feet * 12) + inches;
+
+            if (weight > 0 && totalInches > 0) {
+                const bmi = (weight / (totalInches * totalInches)) * 703;
+                const roundedBMI = bmi.toFixed(1);
+
+                let status = "";
+                let badgeClass = "";//CSS အရောင်class nameသိမ်းဖို့
+
+                if (bmi < 18.5) {
+                    status = "Underweight";
+                    badgeClass = "status-underweight";
+                } else if (bmi >= 18.5 && bmi < 24.9) {
+                    status = "Normal Weight";
+                    badgeClass = "status-normal";
+                } else if (bmi >= 25 && bmi < 29.9) {
+                    status = "Overweight";
+                    badgeClass = "status-overweight";
+                } else {
+                    status = "Obese";
+                    badgeClass = "status-obese";
+                }
+
+                document.getElementById('bmiResult').innerText = roundedBMI;
+
+                const statusBadge = document.getElementById('statusResult');
+                statusBadge.innerText = status;
+                statusBadge.className = "status-badge " + badgeClass;//statusအလိုက်အရာင်တွပြောင်းလို့ရ
+
+            } else {
+                alert("Please enter valid numbers.");
+            }
+        }
+    </script>
+
+</body>
+
+</html>

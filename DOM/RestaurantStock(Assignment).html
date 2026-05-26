@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Stock Control</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --warning: #f59e0b;
+            --border-color: #e2e8f0;
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        header i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+       
+        .dashboard-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .summary-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .summary-info h3 {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .summary-info p {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        /* Main Workspace Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 992px) {
+            .main-grid {
+                grid-template-columns: 350px 1fr;
+            }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            border: 1px solid var(--border-color);
+            height: fit-content;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background-color: #f8fafc;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-group-full {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { background: #059669; }
+
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { background: #dc2626; }
+
+        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); }
+        .btn-outline:hover { background: var(--bg-primary); color: var(--text-main); }
+
+    
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background-color: var(--bg-primary);
+            color: var(--text-muted);
+            padding: 1rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        
+        .badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-success { background: var(--success-bg); color: var(--success); }
+        .badge-danger { background: var(--danger-bg); color: var(--danger); }
+
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+        }
+        .btn-icon-edit { background: #eff6ff; color: #2563eb; }
+        .btn-icon-edit:hover { background: #dbeafe; }
+        .btn-icon-delete { background: var(--danger-bg); color: var(--danger); }
+        .btn-icon-delete:hover { background: #fee2e2; }
+
+        .divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <i class="fa-solid fa-boxes-stacked"></i>
+        <h1>Restaurant Stock Control</h1>
+    </header>
+
+    <div class="dashboard-summary">
+        <div class="summary-card">
+            <div class="summary-icon" style="background: #e0e7ff; color: var(--primary);">
+                <i class="fa-solid fa-utensils"></i>
+            </div>
+            <div class="summary-info">
+                <h3>Total Ingredients</h3>
+                <p id="total-ingredients-count">0</p>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon" style="background: #fee2e2; color: var(--danger);">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="summary-info">
+                <h3>Low Stock Items</h3>
+                <p id="low-stock-count" style="color: var(--danger);">0</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-grid">
+        
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div class="card">
+                <div class="card-title">
+                    <i class="fa-solid fa-pen-to-square"></i> <span id="form-action-title">Manage Ingredient</span>
+                </div>
+                <form id="ingredient-form">
+                    <input type="hidden" id="edit-index" value="-1">
+                    <div class="form-group">
+                        <label for="ingredient-name">Ingredient Name</label>
+                        <input type="text" id="ingredient-name" class="form-control" placeholder="e.g., Chicken Breast" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ingredient-unit">Unit</label>
+                        <input type="text" id="ingredient-unit" class="form-control" placeholder="e.g., kg, pcs, liter" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="current-stock">Current Stock</label>
+                        <input type="number" id="current-stock" class="form-control" min="0" value="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="min-stock">Minimum Stock Level</label>
+                        <input type="number" id="min-stock" class="form-control" min="0" value="10" required>
+                    </div>
+                    
+                    <div class="btn-group" id="add-btn-group">
+                        <button type="submit" class="btn btn-primary" style="grid-column: span 2;"><i class="fa-solid fa-plus"></i> Add Ingredient</button>
+                    </div>
+                    <div class="btn-group" id="update-btn-group" style="display: none;">
+                        <button type="button" onclick="updateIngredient()" class="btn btn-success"><i class="fa-solid fa-check"></i> Update</button>
+                        <button type="button" onclick="resetForm()" class="btn btn-outline">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <i class="fa-solid fa-sliders"></i> Adjust Stock
+                </div>
+                <div class="form-group">
+                    <label for="adjust-select">Select Ingredient</label>
+                    <select id="adjust-select" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="adjust-quantity">Quantity</label>
+                    <input type="number" id="adjust-quantity" class="form-control" min="1" value="1">
+                </div>
+                <div class="btn-group">
+                    <button onclick="adjustStock('increase')" class="btn btn-success"><i class="fa-solid fa-arrow-up"></i> Increase</button>
+                    <button onclick="adjustStock('decrease')" class="btn btn-danger"><i class="fa-solid fa-arrow-down"></i> Decrease</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fa-solid fa-list"></i> Current Stock Levels
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Unit</th>
+                            <th>Current Stock</th>
+                            <th>Min Stock</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stock-table-body">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    
+    let ingredients = JSON.parse(localStorage.getItem('restaurant_ingredients')) || [
+        { name: 'Flour', unit: 'kg', current: 100, min: 5 },
+        { name: 'Tomatos', unit: 'kg', current: 100, min: 8 },
+        { name: 'Rice', unit: 'kg', current: 10, min: 5 }
+    ];
+
+    const form = document.getElementById('ingredient-form');
+    const tableBody = document.getElementById('stock-table-body');
+    const adjustSelect = document.getElementById('adjust-select');
+
+   
+    window.onload = function() {
+        renderTable();
+    };
+
+    function saveToLocalStorage() {
+        localStorage.setItem('restaurant_ingredients', JSON.stringify(ingredients));
+    }
+
+
+    function renderTable() {
+        tableBody.innerHTML = '';
+        adjustSelect.innerHTML = '';
+        
+        let lowStockCount = 0;
+
+        ingredients.forEach((item, index) => {
+            const isLow = item.current <= item.min;
+            if(isLow) lowStockCount++;
+
+            
+            const statusBadge = isLow 
+                ? `<span class="badge badge-danger"><i class="fa-solid fa-circle-exclamation"></i> Low Stock</span>`
+                : `<span class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Good</span>`;
+
+         
+            const row = `
+                <tr>
+                    <td style="font-weight: 600;">${item.name}</td>
+                    <td><span style="color: var(--text-muted); font-size: 0.9rem;">${item.unit}</span></td>
+                    <td style="font-weight: 600; color: ${isLow ? 'var(--danger)' : 'var(--text-main)'}">${item.current}</td>
+                    <td>${item.min}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-icon btn-icon-edit" onclick="editIngredient(${index})" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn-icon btn-icon-delete" onclick="deleteIngredient(${index})" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            tableBody.insertAdjacentHTML('beforeend', row);
+
+           
+            const option = `<option value="${index}">${item.name} (${item.unit})</option>`;
+            adjustSelect.insertAdjacentHTML('beforeend', option);
+        });
+
+      
+        document.getElementById('total-ingredients-count').innerText = ingredients.length;
+        document.getElementById('low-stock-count').innerText = lowStockCount;
+    }
+
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const newIngredient = {
+            name: document.getElementById('ingredient-name').value,
+            unit: document.getElementById('ingredient-unit').value,
+            current: Number(document.getElementById('current-stock').value),
+            min: Number(document.getElementById('min-stock').value)
+        };
+
+        ingredients.push(newIngredient);
+        saveToLocalStorage();
+        renderTable();
+        form.reset();
+    });
+
+    
+    function editIngredient(index) {
+        document.getElementById('edit-index').value = index;
+        document.getElementById('ingredient-name').value = ingredients[index].name;
+        document.getElementById('ingredient-unit').value = ingredients[index].unit;
+        document.getElementById('current-stock').value = ingredients[index].current;
+        document.getElementById('min-stock').value = ingredients[index].min;
+
+        document.getElementById('form-action-title').innerText = "Update Ingredient";
+        document.getElementById('add-btn-group').style.display = 'none';
+        document.getElementById('update-btn-group').style.display = 'grid';
+    }
+
+    
+    function updateIngredient() {
+        const index = document.getElementById('edit-index').value;
+        if(index === '-1') return;
+
+        ingredients[index] = {
+            name: document.getElementById('ingredient-name').value,
+            unit: document.getElementById('ingredient-unit').value,
+            current: Number(document.getElementById('current-stock').value),
+            min: Number(document.getElementById('min-stock').value)
+        };
+
+        saveToLocalStorage();
+        renderTable();
+        resetForm();
+    }
+
+    
+    function resetForm() {
+        form.reset();
+        document.getElementById('edit-index').value = '-1';
+        document.getElementById('form-action-title').innerText = "Manage Ingredient";
+        document.getElementById('add-btn-group').style.display = 'grid';
+        document.getElementById('update-btn-group').style.display = 'none';
+    }
+
+   
+    function deleteIngredient(index) {
+        if(confirm(`Are you sure you want to delete ${ingredients[index].name}?`)) {
+            ingredients.splice(index, 1);
+            saveToLocalStorage();
+            renderTable();
+            resetForm();
+        }
+    }
+
+  
+    function adjustStock(action) {
+        const index = adjustSelect.value;
+        if(index === "" || index === null) return alert("Please select an ingredient first.");
+
+        const quantity = Number(document.getElementById('adjust-quantity').value);
+        if(quantity <= 0) return alert("Quantity must be greater than 0");
+
+        if(action === 'increase') {
+            ingredients[index].current += quantity;
+        } else if(action === 'decrease') {
+            if(ingredients[index].current - quantity < 0) {
+                return alert("Cannot reduce stock below 0!");
+            }
+            ingredients[index].current -= quantity;
+        }
+
+        saveToLocalStorage();
+        renderTable();
+    }
+</script>
+
+</body>
+</html>

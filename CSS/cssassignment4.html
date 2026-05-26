@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Job Application Portal</title>
+    <link rel="stylesheet" href="css4.css">
+</head>
+
+<body>
+    <div class="jobhead">
+        <h1>Job Application Portal</h1>
+    </div>
+    <div class="container">
+        <h2>Avaliable Job Position</h2>
+        <div>
+            <table class="table-container">
+                <tr>
+                    <th>Job Title</th>
+                    <th>Department</th>
+                    <th>Location</th>
+                    <th>Salary</th>
+                </tr>
+                <tbody>
+                    <tr>
+                        <td>Web Developer</td>
+                        <td>IT</td>
+                        <td>New York</td>
+                        <td class="salary">$80,000</td>
+                    </tr>
+                    <tr>
+                        <td>Graphic Designer</td>
+                        <td>Marketing</td>
+                        <td>San Francisco</td>
+                        <td class="salary">$70,000</td>
+                    </tr>
+                    <tr>
+                        <td>Project Manager</td>
+                        <td>Operations</td>
+                        <td>Los Angeles</td>
+                        <td class="salary">$90,000</td>
+                    </tr>
+                    <tr>
+                        <td>HR Specialist</td>
+                        <td>Human Resources</td>
+                        <td>Chicago</td>
+                        <td class="salary">$60,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <h2>Apply Now</h2>
+        </div>
+        <div class="form-container">
+        <form>
+            <div class="form-group">
+                <label for="fname">Full Name: </label>
+                <input type="text" id="fname" class="fname" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email: </label>
+                <input type="email" id="email" class="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="position">Position Applying For: </label>
+                <select id="position">
+                    <option value="web">Web Developer</option>
+                    <option value="graphic">Graphic Designer</option>
+                    <option value="project">Project Manager</option>
+                    <option value="hr">HR Specialist</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="resume">Upload Resume:</label>
+                <input type="file" id="resume">
+            </div>
+
+            <div class="form-group">
+                <label for="cover-letter">Cover Letter:</label>
+                <textarea id="cover-letter" rows="5" placeholder="Write your cover letter here..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Submit Application</button>
+
+        </form>
+</div>
+    </div>
+</body>
+
+</html>

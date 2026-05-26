@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f7f7;
+            font-family: sans-serif;
+        }
+
+        .job-header {
+            background-color: #1a2a3a;
+            color: white;
+            padding: 25px 0;
+            text-align: center;
+        }
+
+        .table-container {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            border: 1px solid #264653;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #264653;
+            color: #ffffff;
+            padding: 18px;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .table td {
+            vertical-align: middle;
+            padding: 15px;
+        }
+
+        .salary-col {
+            color: #2a9d8f;
+            font-weight: bold;
+        }
+
+        .form-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+
+        .btn-orange {
+            background-color: #ff6600;
+            color: white;
+            font-weight: bold;
+            padding: 12px;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn-orange:hover {
+            background-color: #e65c00;
+            color: white;
+        }
+
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #ff6600;
+            box-shadow: 0 0 0 0.25 text-primary-emphasis;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="job-header mb-5">
+        <h1 class="m-0">Job Application Portal</h1>
+    </header>
+
+    <div class="container pb-5">
+
+        <div class="text-center">
+            <h2>Available Job Positions</h2>
+        </div>
+
+        <div class="table-container mb-5">
+            <table class="table table-bordered table-hover m-0 text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="py-3 px-4">Job Title</th>
+                        <th class="py-3 px-4">Department</th>
+                        <th class="py-3 px-4">Location</th>
+                        <th class="py-3 px-4">Salary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Web Developer</td>
+                        <td>IT</td>
+                        <td>New York</td>
+                        <td class="salary-col">$80,000</td>
+                    </tr>
+                    <tr>
+                        <td>Graphic Designer</td>
+                        <td>Marketing</td>
+                        <td>San Francisco</td>
+                        <td class="salary-col">$70,000</td>
+                    </tr>
+                    <tr>
+                        <td>Project Manager</td>
+                        <td>Operations</td>
+                        <td>Los Angeles</td>
+                        <td class="salary-col">$90,000</td>
+                    </tr>
+                    <tr>
+                        <td>HR Specialist</td>
+                        <td>Human Resources</td>
+                        <td>Chicago</td>
+                        <td class="salary-col">$60,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center">
+            <h2>Apply Now</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-9 col-lg-8">
+                <div class="card form-card p-4 p-md-5">
+                    <form>
+                        <div class="mb-4">
+                            <label class="form-label">Full Name:</label>
+                            <input type="text" class="form-control py-2" placeholder="Enter your full name" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Email:</label>
+                            <input type="email" class="form-control py-2" placeholder="Enter your email" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Position Applying For:</label>
+                            <select class="form-select py-2">
+                                <option selected>Web Developer</option>
+                                <option>Graphic Designer</option>
+                                <option>Project Manager</option>
+                                <option>HR Specialist</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Upload Resume:</label>
+                            <input type="file" class="form-control">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Cover Letter:</label>
+                            <textarea class="form-control" rows="5"
+                                placeholder="Write your cover letter here..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-orange w-100 rounded-3">Submit Application</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

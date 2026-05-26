@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrabBites - Premium Food Delivery</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --brand-color: #ff4757;
+            --bg-light: #f8f9fa;
+            --text-dark: #2f3542;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.7rem;
+            color: var(--brand-color) !important;
+        }
+
+        /* Category Filter Buttons */
+        .category-badge {
+            padding: 12px 24px;
+            border-radius: 50px;
+            background: #ffffff;
+            color: #57606f;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-right: 12px;
+            border: 1px solid #f1f2f6;
+            user-select: none;
+        }
+
+        .category-badge:hover, .category-badge.active {
+            background: var(--brand-color);
+            color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(255, 71, 87, 0.2);
+        }
+
+        /* Food Card Design */
+        .food-card {
+            background: #ffffff;
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .food-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .food-img-wrapper {
+            position: relative;
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .food-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .food-card:hover .food-img {
+            transform: scale(1.1);
+        }
+
+        .food-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--brand-color);
+            backdrop-filter: blur(5px);
+        }
+
+        .price-tag {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--brand-color);
+        }
+
+        .sticky-box {
+            position: sticky;
+            top: 100px;
+        }
+
+        .custom-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        /* Timeline Tracker */
+        .timeline {
+            position: relative;
+            padding-left: 35px;
+            list-style: none;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 9px;
+            top: 5px;
+            width: 3px;
+            height: 85%;
+            background: #e4e7eb;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .timeline-icon {
+            position: absolute;
+            left: -35px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #ced4da;
+            border: 4px solid #ffffff;
+            box-shadow: 0 0 0 2px #ced4da;
+        }
+
+        .timeline-item.completed .timeline-icon {
+            background: #2ed573;
+            box-shadow: 0 0 0 2px #2ed573;
+        }
+
+        .timeline-item.current .timeline-icon {
+            background: var(--brand-color);
+            box-shadow: 0 0 0 2px var(--brand-color);
+            animation: ripple 1.4s infinite;
+        }
+
+        @keyframes ripple {
+            0% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 71, 87, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fa-solid fa-pizza-slice me-2"></i>GrabBites</a>
+            <div class="d-flex align-items-center">
+                <span class="me-4 text-muted fw-semibold d-none d-md-inline"><i class="fa-solid fa-location-arrow me-2 text-danger"></i>Mandalay, MM</span>
+                <button class="btn btn-danger position-relative rounded-pill px-4 py-2">
+                    <i class="fa-solid fa-shopping-bag me-2"></i> Basket
+                    <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        
+        <div class="mb-5 text-center text-md-start overflow-auto text-nowrap pb-2">
+            <div class="category-badge active" onclick="filterFood('all', this)"><i class="fa-solid fa-border-all me-2"></i>All Cuisines</div>
+            <div class="category-badge" onclick="filterFood('chinese', this)"><i class="fa-solid fa-bowl-rice me-2"></i>Chinese Food</div>
+            <div class="category-badge" onclick="filterFood('thai', this)"><i class="fa-solid fa-shrimp me-2"></i>Thai Food</div>
+            <div class="category-badge" onclick="filterFood('western', this)"><i class="fa-solid fa-burger me-2"></i>Burgers & Western</div>
+            <div class="category-badge" onclick="filterFood('dessert', this)"><i class="fa-solid fa-ice-cream me-2"></i>Desserts</div>
+        </div>
+
+        <div class="row g-4">
+            
+            <div class="col-lg-8">
+                <h3 class="fw-bold mb-4" id="menu-title">All Cuisines Menu</h3>
+                <div class="row g-4" id="food-container">
+                    
+                    <div class="col-md-6 food-item chinese">
+                        <div class="card food-card">
+                            <div class="food-img-wrapper">
+                                <span class="food-tag">Chinese</span>
+                                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=600&auto=format&fit=crop" class="food-img" alt="Szechuan Noodles">
+                            </div>
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold mb-1">Spicy Szechuan Noodles</h5>
+                                <p class="text-muted small">Hand-pulled noodles tossed in fiery chili oil, minced chicken, and roasted peanuts.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3"><span class="price-tag">4,800 MMK</span><button class="btn btn-outline-danger rounded-pill px-3 fw-bold btn-sm" onclick="addToCart('Szechuan Noodles', 4800)">+ Add</button></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 food-item chinese">
+                        <div class="card food-card">
+                            <div class="food-img-wrapper">
+                                <span class="food-tag">Chinese</span>
+                                <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?q=80&w=600&auto=format&fit=crop" class="food-img" alt="Dim Sum">
+                            </div>
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold mb-1">Steamed Pork Dim Sum</h5>
+                                <p class="text-muted small">Traditional bamboo basket steamed dumplings packed with seasoned juicy pork stuffing.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3"><span class="price-tag">5,000 MMK</span><button class="btn btn-outline-danger rounded-pill px-3 fw-bold btn-sm" onclick="addToCart('Pork Dim Sum', 5000)">+ Add</button></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 food-item chinese">
+                        <div class="card food-card">
+                            <div class="food-img-wrapper">
+                                <span class="food-tag">Chinese</span>
+                                <img src="https://images.unsplash.com/photo-1525755662778-989d0524087e?q=80&w=600&auto=format&fit=crop" class="food-img" alt="Kung Pao Chicken">
+                            </div>
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold mb-1">Kung Pao Chicken</h5>
+                                <p class="text-muted small">Stir-fried diced chicken with bell peppers, dry chilies, and crunchy cashews.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3"><span class="price-tag">6,500 MMK</span><button class="btn btn-outline-danger rounded-pill px-3 fw-bold btn-sm" onclick="addToCart('Kung Pao Chicken', 6500)">+ Add</button></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 food-item thai">
+                        <div class="card food-card">
+                            <div class="food-img-wrapper">
+                                <span class="food-tag">Thai</span>
+                                <img src="https://images.unsplash.com/photo-1545093149-618ce3bcf49d?q=80&w=600&auto=format&fit=crop" class="food-img" alt="Tom Yum Goong">
+                            </div>
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold mb-1">Tom Yum Goong (Shrimp Soup)</h5>
+                                <p class="text-muted small">Hot & sour authentic soup infused with lemongrass, kaffir lime, and jumbo fresh shrimps.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3"><span class="price-tag">8,500 MMK</span><button class="btn btn-outline-danger rounded-pill px-3 fw-bold btn-sm" onclick="addToCart('Tom Yum Goong', 8500)">+ Add</button></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 food-item thai">
+                        <div class="card food-card">
+                            <div class="food-img-wrapper">
+                                <span class="food-tag">Thai</span>
+                                <img src="https://images.unsplash.com/photo-1626804475315-9644b37a2fe4?q=80&w=600&auto=format&fit=crop" class="food-img" alt="Pad Thai">
+                            </div>
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold mb-1">Classic Pad Thai Noodles</h5>
+                                <p class="text-muted small">Stir-fried rice noodles with eggs, tofu, bean sprouts, crushed peanuts, and sweet tamarind paste.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3"><span class="price-tag">5,500 MMK</span><button class="btn btn-outline-danger rounded-pill px-3 fw-bold btn-sm" onclick="addToCart('Classic Pad Thai', 5500)">+ Add</button></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 food-item thai">
+                        <div class="card food-card">
+                            <div class="food-img-wrapper">
+                                <span class="food-tag">Thai</span>
+                                <img src="https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?q=80&w=600&auto=format&fit=crop" class="food-img" alt="Thai Green Curry">
+                            </div>
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold mb-1">Authentic Thai Green Curry</h5>
+                                <p class="text-muted small">Rich coconut milk curry loaded with tender chicken, bamboo shoots, and fragrant basil.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3"><span class="price-tag">7,000 MMK</span><button class="btn btn-outline-danger rounded-pill px-3 fw-bold btn-sm" onclick="addToCart('Thai Green Curry', 7000)">+ Add</button></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 food-item western">
+                        <div class="card food-card">
+                            <div class="food-img-wrapper">
+                                <span class="food-tag">Western</span>
+                                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=600&auto=format&fit=crop" class="food-img" alt="Cheese Burger">
+                            </div>
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold mb-1">Double Stack Cheese Burger</h5>
+                                <p class="text-muted small">Two premium beef patties, melted cheddar cheese, fresh lettuce, and house sauce.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3"><span class="price-tag">5,500 MMK</span><button class="btn btn-outline-danger rounded-pill px-3 fw-bold btn-sm" onclick="addToCart('Double Cheese Burger', 5500)">+ Add</button></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 food-item western">
+                        <div class="card food-card">
+                            <div class="food-img-wrapper">
+                                <span class="food-tag">Western</span>
+                                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=600&auto=format&fit=crop" class="food-img" alt="Pizza">
+                            </div>
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold mb-1">Rustic Pepperoni Feast</h5>
+                                <p class="text-muted small">Signature thin crust topped with authentic pepperoni, premium mozzarella, and basil leaves.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3"><span class="price-tag">13,500 MMK</span><button class="btn btn-outline-danger rounded-pill px-3 fw-bold btn-sm" onclick="addToCart('Pepperoni Feast', 13500)">+ Add</button></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 food-item dessert">
+                        <div class="card food-card">
+                            <div class="food-img-wrapper">
+                                <span class="food-tag">Dessert</span>
+                                <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=600&auto=format&fit=crop" class="food-img" alt="Chocolate Cake">
+                            </div>
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold mb-1">Fudge Chocolate Cake</h5>
+                                <p class="text-muted small">Decadent moist chocolate cake layered with rich Belgian chocolate ganache icing.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3"><span class="price-tag">4,000 MMK</span><button class="btn btn-outline-danger rounded-pill px-3 fw-bold btn-sm" onclick="addToCart('Chocolate Cake', 4000)">+ Add</button></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mt-5">
+                    <h4 class="fw-bold mb-4"><i class="fa-solid fa-map-location-dot me-2 text-danger"></i>Active Order Tracker</h4>
+                    <div class="custom-box">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <ul class="timeline m-0">
+                                    <li id="step-1" class="timeline-item completed"><div class="timeline-icon"></div><h6 class="fw-bold m-0 text-success">Order Confirmed</h6><small class="text-muted">Kitchen accepted your request</small></li>
+                                    <li id="step-2" class="timeline-item current"><div class="timeline-icon"></div><h6 class="fw-bold m-0">Preparing Your Meal</h6><small class="text-muted">Chef is baking with precision</small></li>
+                                    <li id="step-3" class="timeline-item"><div class="timeline-icon"></div><h6 class="fw-bold m-0">Out for Delivery</h6><small class="text-muted">Rider is picking up the parcel</small></li>
+                                </ul>
+                                <button class="btn btn-dark btn-sm mt-3 rounded-pill px-3" onclick="nextTrackerStep()"><i class="fa-solid fa-bolt me-1"></i> Simulate Progress</button>
+                            </div>
+                            <div class="col-md-6 text-center d-none d-md-block border-start py-3">
+                                <i class="fa-solid fa-motorcycle fa-4x text-muted mb-3" id="rider-icon" style="transition: all 0.5s;"></i>
+                                <h6 class="text-muted mb-1">Estimated Arrival</h6>
+                                <h2 class="fw-black text-danger font-monospace">18 MINS</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sticky-box">
+                    <div class="custom-box">
+                        <h4 class="fw-bold mb-4 d-flex justify-content-between align-items-center"><span>Basket Summary</span><i class="fa-solid fa-receipt text-muted"></i></h4>
+                        <div id="cart-items-wrapper">
+                            <div class="text-center py-4"><i class="fa-solid fa-basket-shopping text-muted fa-2x mb-2 d-block"></i><span class="text-muted small">Add food items to start checkout.</span></div>
+                        </div>
+                        <hr class="my-4">
+                        <div class="d-flex justify-content-between align-items-center fw-bold mb-4 fs-5"><span>Grand Total:</span><span id="cart-total-text" class="text-danger">0 MMK</span></div>
+                        <button class="btn btn-danger btn-lg w-100 rounded-pill fw-bold" onclick="alert('Java Backend Trigger: Saving Order Entry!')">Proceed to Order</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let itemsCount = 0;
+        let runningTotal = 0;
+        let trackerState = 2;
+
+        // 1. Dynamic Food Filtering Category Logic
+        function filterFood(category, element) {
+            // Remove active classes from all categories
+            document.querySelectorAll('.category-badge').forEach(badge => badge.classList.remove('active'));
+            // Set active to clicked element
+            element.classList.add('active');
+
+            // Filter items animation
+            document.querySelectorAll('.food-item').forEach(item => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Update Section Title Dynamically
+            const titleMapping = {
+                all: "All Cuisines Menu",
+                chinese: "Chinese Gourmet Delights 🇨🇳",
+                thai: "Spicy & Sweet Thai Kitchen 🇹🇭",
+                western: "Western Sizzlers & Burgers 🍔",
+                dessert: "Sweet Tooth Desserts 🍰"
+            };
+            document.getElementById('menu-title').innerText = titleMapping[category];
+        }
+
+        // 2. Add to Basket Function
+        function addToCart(name, price) {
+            itemsCount++;
+            runningTotal += price;
+            document.getElementById('cart-badge').innerText = itemsCount;
+
+            const container = document.getElementById('cart-items-wrapper');
+            if(itemsCount === 1) container.innerHTML = '';
+
+            const rowHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div><h6 class="m-0 fw-bold small">${name}</h6><small class="text-muted">Quantity: 1x</small></div>
+                    <span class="fw-semibold text-dark small">${price.toLocaleString()} MMK</span>
+                </div>
+            `;
+            container.innerHTML += rowHTML;
+            document.getElementById('cart-total-text').innerText = runningTotal.toLocaleString() + " MMK";
+        }
+
+        // 3. Tracker State Engine
+        function nextTrackerStep() {
+            if(trackerState === 2) {
+                document.getElementById('step-2').classList.remove('current');
+                document.getElementById('step-2').classList.add('completed');
+                document.getElementById('step-2').querySelector('h6').classList.add('text-success');
+                document.getElementById('step-3').classList.add('current');
+                document.getElementById('rider-icon').className = "fa-solid fa-motorcycle fa-4x text-danger text-opacity-75 animate-bounce";
+                trackerState++;
+            } else if(trackerState === 3) {
+                document.getElementById('step-3').classList.remove('current');
+                document.getElementById('step-3').classList.add('completed');
+                document.getElementById('step-3').querySelector('h6').classList.add('text-success');
+                alert('Success: Order delivered! 🛵🎉');
+                trackerState = 1; 
+            } else {
+                document.getElementById('step-2').className = "timeline-item current";
+                document.getElementById('step-2').querySelector('h6').className = "fw-bold m-0";
+                document.getElementById('step-3').className = "timeline-item";
+                document.getElementById('step-3').querySelector('h6').className = "fw-bold m-0";
+                document.getElementById('rider-icon').className = "fa-solid fa-motorcycle fa-4x text-muted mb-3";
+                trackerState = 2;
+            }
+        }
+    </script>
+</body>
+</html>

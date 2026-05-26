@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate HR Dashboard - Full UI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #1e293b;
+            --secondary-color: #0f766e;
+            --bg-light: #f8fafc;
+            --text-dark: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            height: 100vh;
+            width: 260px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding-top: 20px;
+            z-index: 1000;
+        }
+
+        .sidebar .brand {
+            padding: 10px 25px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #38bdf8;
+            border-bottom: 1px solid #334155;
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            padding: 14px 25px;
+            text-decoration: none;
+            font-size: 1rem;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sidebar a i {
+            margin-right: 15px;
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        .sidebar a:hover, .sidebar a.active {
+            color: #ffffff;
+            background-color: #334155;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        /* Content Area */
+        .main-content {
+            margin-left: 260px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background-color: #ffffff;
+            padding: 15px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-section {
+            display: none; /* အားလုံးကို ဖျောက်ထားပြီး JS နဲ့မှ လှမ်းဖော်မည် */
+        }
+
+        .page-section.active-section {
+            display: block; /* active ဖြစ်တဲ့ section တစ်ခုပဲ ပြမည် */
+        }
+
+        .stat-card, .custom-card {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="brand">
+            <i class="fa-solid fa-chart-line me-2"></i>HR CORE v1.0
+        </div>
+        <a onclick="switchSection('dashboard')" id="nav-dashboard" class="active"><i class="fa-solid fa-house"></i> Dashboard</a>
+        <a onclick="switchSection('scheduler')" id="nav-scheduler"><i class="fa-solid fa-calendar-days"></i> Shift Scheduler</a>
+        <a onclick="switchSection('leaves')" id="nav-leaves"><i class="fa-solid fa-envelope-open-text"></i> Leave Requests</a>
+        <a onclick="switchSection('kpi')" id="nav-kpi"><i class="fa-solid fa-star"></i> KPI Metrics</a>
+        <a onclick="switchSection('employees')" id="nav-employees"><i class="fa-solid fa-users"></i> Employees</a>
+        <a onclick="switchSection('settings')" id="nav-settings"><i class="fa-solid fa-gear"></i> Settings</a>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="topbar">
+            <h4 id="page-title" class="m-0 fw-bold">Dashboard Overview</h4>
+            <div class="d-flex align-items-center">
+                <span class="me-3 text-muted"><i class="fa-regular fa-calendar me-2"></i>2026 May 20</span>
+                <span class="badge bg-secondary p-2"><i class="fa-solid fa-user-tie me-2"></i>HR Manager</span>
+            </div>
+        </div>
+
+        <div id="section-dashboard" class="page-section active-section">
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card d-flex align-items-center justify-content-between">
+                        <div><h6 class="text-muted small">TOTAL EMPLOYEES</h6><h3 class="m-0 fw-bold">124</h3></div>
+                        <div class="icon-box bg-primary-subtle text-primary"><i class="fa-solid fa-users"></i></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card d-flex align-items-center justify-content-between">
+                        <div><h6 class="text-muted small">ON DUTY TODAY</h6><h3 class="m-0 fw-bold">85</h3></div>
+                        <div class="icon-box bg-success-subtle text-success"><i class="fa-solid fa-user-check"></i></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card d-flex align-items-center justify-content-between">
+                        <div><h6 class="text-muted small">PENDING LEAVES</h6><h3 class="m-0 fw-bold">8</h3></div>
+                        <div class="icon-box bg-warning-subtle text-warning"><i class="fa-solid fa-clock"></i></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card d-flex align-items-center justify-content-between">
+                        <div><h6 class="text-muted small">AVG KPI SCORE</h6><h3 class="m-0 fw-bold">84.5%</h3></div>
+                        <div class="icon-box bg-info-subtle text-info"><i class="fa-solid fa-award"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-8">
+                    <div class="custom-card"><h5 class="fw-bold mb-3">Department Trends</h5><canvas id="dashboardChart" height="120"></canvas></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="custom-card h-100">
+                        <h5 class="fw-bold mb-3">Notice Board</h5>
+                        <div class="alert alert-info py-2 small">System maintenance on Sunday.</div>
+                        <div class="alert alert-warning py-2 small">Review Q2 Performance KPI.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-scheduler" class="page-section">
+            <div class="custom-card mb-4 d-flex justify-content-between align-items-center">
+                <h5 class="m-0 fw-bold">Weekly Shift Roster (May 2026)</h5>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addShiftModal"><i class="fa-solid fa-plus me-2"></i>Assign New Shift</button>
+            </div>
+            <div class="custom-card table-responsive">
+                <table class="table table-bordered align-middle text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Employee</th>
+                            <th>Mon 18</th><th>Tue 19</th><th>Wed 20 (Today)</th><th>Thu 21</th><th>Fri 22</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-start fw-bold">Mg Thura</td>
+                            <td><span class="badge bg-success">Morning</span></td>
+                            <td><span class="badge bg-success">Morning</span></td>
+                            <td><span class="badge bg-success">Morning</span></td>
+                            <td><span class="badge bg-danger">Night</span></td>
+                            <td><span class="badge bg-secondary">Off</span></td>
+                        </tr>
+                        <tr>
+                            <td class="text-start fw-bold">Ma Su Mon</td>
+                            <td><span class="badge bg-info">Evening</span></td>
+                            <td><span class="badge bg-info">Evening</span></td>
+                            <td><span class="badge bg-warning text-dark">Leave</span></td>
+                            <td><span class="badge bg-info">Evening</span></td>
+                            <td><span class="badge bg-success">Morning</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="section-leaves" class="page-section">
+            <div class="custom-card">
+                <h5 class="fw-bold mb-3">Manage Employee Leaves</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Employee</th><th>Leave Type</th><th>Duration</th><th>Reason</th><th>Status</th><th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                class="fw-bold"<td>Mg Thura</td><td>Medical Leave</td><td>3 Days (20-22 May)</td><td>Severe Flu</td>
+                                <td><span class="badge bg-warning text-dark">Pending</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-success me-1" onclick="alert('Approved Successfully')"><i class="fa-solid fa-check"></i> Approve</button>
+                                    <button class="btn btn-sm btn-danger"><i class="fa-solid fa-xmark"></i> Reject</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-kpi" class="page-section">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="custom-card">
+                        <h5 class="fw-bold mb-3">Evaluate Employee KPI</h5>
+                        <form onsubmit="event.preventDefault(); alert('KPI Score Submitted!');">
+                            <div class="mb-3">
+                                <label class="form-label">Select Employee</label>
+                                <select class="form-select"><option>Mg Thura</option><option>Ma Su Mon</option></select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Attendance Score (Max 40)</label>
+                                <input type="number" class="form-control" max="40" placeholder="e.g. 38">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Task Performance (Max 60)</label>
+                                <input type="number" class="form-control" max="60" placeholder="e.g. 55">
+                            </div>
+                            <button type="submit" class="btn btn-teal w-100 text-white" style="background-color: var(--secondary-color);">Submit Evaluation</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="custom-card h-100">
+                        <h5 class="fw-bold mb-3">Top Performers of the Month</h5>
+                        <ol class="list-group list-group-numbered">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto"><div class="fw-bold">Ma Su Mon</div>Design Team</div>
+                                <span class="badge bg-success rounded-pill">95 / 100 Points</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto"><div class="fw-bold">Mg Thura</div>Development Team</div>
+                                <span class="badge bg-primary rounded-pill">89 / 100 Points</span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-employees" class="page-section">
+            <div class="custom-card mb-4 d-flex justify-content-between align-items-center">
+                <h5 class="m-0 fw-bold">Employee Directory</h5>
+                <button class="btn btn-primary btn-sm"><i class="fa-solid fa-user-plus me-2"></i>Add Employee</button>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card p-3 text-center shadow-sm border-0">
+                        <i class="fa-solid fa-user-gear fa-3x text-muted my-3"></i>
+                        <h5 class="fw-bold m-0">Mg Thura</h5>
+                        <p class="text-muted small">Senior Developer</p>
+                        <div class="border-top pt-2"><span class="badge bg-primary-subtle text-primary">Development</span></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3 text-center shadow-sm border-0">
+                        <i class="fa-solid fa-user-astronaut fa-3x text-muted my-3"></i>
+                        <h5 class="fw-bold m-0">Ma Su Mon</h5>
+                        <p class="text-muted small">UI/UX Designer</p>
+                        <div class="border-top pt-2"><span class="badge bg-info-subtle text-info">Design Team</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-settings" class="page-section">
+            <div class="custom-card col-md-6">
+                <h5 class="fw-bold mb-4">System Settings</h5>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked>
+                    <label class="form-check-input-label" for="flexSwitchCheckDefault">Email notifications for Leave Requests</label>
+                </div>
+                <div class="form-check form-switch mb-4">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
+                    <label class="form-check-input-label" for="flexSwitchCheckChecked">Auto-calculate KPI at end of the month</label>
+                </div>
+                <button class="btn btn-primary btn-sm px-4">Save Configurations</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="addShiftModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title fw-bold">Assign Shift</h5><button type="button" class="btn-close" data-bs-shadow="none" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3"><label class="form-label">Employee</label><select class="form-select"><option>Mg Thura</option><option>Ma Su Mon</option></select></div>
+                        <div class="mb-3"><label class="form-label">Shift Type</label><select class="form-select"><option>Morning (08 AM - 04 PM)</option><option>Evening (04 PM - 12 AM)</option><option>Night (12 AM - 08 AM)</option></select></div>
+                        <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal" onclick="alert('Shift Scheduled Successfully')">Save Shift</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // Page Navigation Logic (Sidebar links နှိပ်ရင် page ပြောင်းပေးမည့် JavaScript)
+        function switchSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active-section'));
+            // Remove active classes from navigation links
+            document.querySelectorAll('.sidebar a').forEach(nav => nav.classList.remove('active'));
+            
+            // Show target section
+            document.getElementById('section-' + sectionId).classList.add('active-section');
+            // Active current link
+            document.getElementById('nav-' + sectionId).classList.add('active');
+
+            // Change dynamic title
+            const titles = {
+                dashboard: "Dashboard Overview",
+                scheduler: "Shift Scheduler & Planner",
+                leaves: "Leave Requests Hub",
+                kpi: "Performance KPI Metrics",
+                employees: "Corporate Employee Directory",
+                settings: "HR System Configurations"
+            };
+            document.getElementById('page-title').innerText = titles[sectionId];
+        }
+
+        // Dashboard Line Chart Setup
+        const ctx = document.getElementById('dashboardChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Overall KPI Trend',
+                    data: [80, 83, 81, 86, 88],
+                    borderColor: '#0f766e',
+                    backgroundColor: 'rgba(15, 118, 110, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+       
+        
+
+        displayJobs();

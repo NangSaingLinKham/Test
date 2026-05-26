@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="my">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Tip Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #a44a31, #e88753);
+            padding: 20px;
+        }
+
+        .calculator-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 35px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            text-align: center;
+            color: #2d3748;
+            margin-bottom: 30px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper span {
+            position: absolute;
+            left: 16px;
+            color: #a0aec0;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px 14px 35px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: #2d3748;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: #f8fafc;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input:focus {
+            border-color: #ff8e53;
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(255, 142, 83, 0.15);
+        }
+
+
+        .btn-calculate {
+            width: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #ff8e53);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-calculate:hover {
+            opacity: 0.95;
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-calculate:active {
+            transform: translateY(1px);
+        }
+
+
+        .result-container {
+            margin-top: 28px;
+            background-color: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #edf2f7;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-top: 5px;
+        }
+
+        .result-label {
+            color: #718096;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .result-value {
+            color: #2d3748;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .result-row.total-per-person .result-label {
+            color: #ff6b6b;
+            font-weight: 700;
+        }
+
+        .result-row.total-per-person .result-value {
+            color: #ff6b6b;
+            font-size: 1.3rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calculator-card">
+        <h2>Tip Calculator 💰</h2>
+
+        <div class="input-group">
+            <label for="bill">Bill Amount ($)</label>
+            <div class="input-wrapper">
+                <span>$</span>
+                <input type="number" id="bill" placeholder="0.00" min="0" step="0.01">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="tip">Tip (%)</label>
+            <div class="input-wrapper">
+                <span>%</span>
+                <input type="number" id="tip" placeholder="15" min="0">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="people">People</label>
+            <div class="input-wrapper">
+                <input type="number" id="people" min="1">
+            </div>
+        </div>
+
+        <button class="btn-calculate" onclick="calculateTip()">Calculate</button>
+
+        <div class="result-container">
+            <div class="result-row">
+                <span class="result-label">Tip Amount</span>
+                <span class="result-value" id="tipAmount">$-</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Total Bill</span>
+                <span class="result-value" id="totalBill">$-</span>
+            </div>
+            <div class="result-row total-per-person">
+                <span class="result-label">Per Person</span>
+                <span class="result-value" id="perPerson">$-</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateTip() {
+            const bill = parseFloat(document.getElementById('bill').value);
+            const tipPercentage = parseFloat(document.getElementById('tip').value);
+            const people = parseInt(document.getElementById('people').value);
+
+
+            if (isNaN(bill) || bill <= 0) {
+                alert('Please fill correct bill!');
+                return;
+            }
+            if (isNaN(tipPercentage) || tipPercentage < 0) {
+                alert('Please fill correct tip!');
+                return;
+            }
+            if (isNaN(people) || people <= 0) {
+                alert('At least one person!');
+                return;
+            }
+
+
+            const tipAmount = (bill * tipPercentage) / 100;
+            const totalBill = bill + tipAmount;
+            const perPersonAmount = totalBill / people;
+
+            document.getElementById('tipAmount').innerText = `$${tipAmount.toFixed(2)}`;
+            document.getElementById('totalBill').innerText = `$${totalBill.toFixed(2)}`;
+            document.getElementById('perPerson').innerText = `$${perPersonAmount.toFixed(2)}`;
+
+        }
+    </script>
+
+</body>
+
+</html>

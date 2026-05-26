@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+
+<body>
+    <script>
+        let people = [
+            { name: "Alex" },
+            { name: "Bob", gender: "M" },
+            { name: "Tom", gender: "m" },
+            { name: "Mary", gender: "F" },
+        ]
+        let result = people.map(function (person) {
+            if (person.gender) {
+                if (person.gender === "m" || person.gender === "M") {
+                    person.gender = "Male"
+                }
+                if (person.gender === "f" || person.gender === "F") {
+                    person.gender = "Female"
+                }
+            } else {
+                person.gender = "Unknown"
+            }
+            return person
+        })
+/* result → [
+ { name: "Alex", gender: "Unknown" },
+ { name: "Bob", gender: "Male" },
+ { name: "Tom", gender: "Male" },
+ { name: "Mary", gender: "Female" },
+*/
+    </script>
+</body>
+
+</html>

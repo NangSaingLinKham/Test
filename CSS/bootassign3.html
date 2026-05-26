@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delicious Bites Restaurant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: sans-serif;
+        }
+
+        .display-5 {
+            background-color: #222222;
+            color: white;
+            text-align: center;
+            padding: 30px 0 10px 0;
+            margin: 0;
+            display: block;
+        }
+
+        .nav {
+            background-color: #575252;
+            padding: 15px;
+            text-align: center;
+            margin: 0;
+        }
+
+        .nav-link {
+            color: white;
+            font-size: 1.1rem;
+            margin: 0 15px;
+        }
+
+
+        h2 {
+            font-weight: bold;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+
+        .menu-card {
+            background-color: white;
+            border: none;
+            border-radius: 0;
+            padding: 25px;
+            height: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+        }
+
+        footer {
+            background-color: #333333;
+            color: white;
+            padding: 15px 0;
+            margin-top: 60px;
+           
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="text-center">
+        <h1 class="display-5 fw-bold">Delicious Bites Restaurant</h1>
+        <nav class="nav justify-content-center">
+            <a class="nav-link" href="#">About Us</a>
+            <a class="nav-link" href="#">Menu</a>
+            <a class="nav-link" href="#">Contact</a>
+        </nav>
+    </header>
+
+    <div class="container my-5">
+
+        <section id="about" class="mb-5">
+            <h2>About Us</h2>
+            <p class="fs-5">Welcome to Delicious Bites Restaurant, where every dish is crafted to perfection. Enjoy a
+                unique blend of flavors in a cozy atmosphere.</p>
+        </section>
+
+        <section id="menu" class="mb-5">
+            <h2>Our Menu</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="menu-card">
+                        <h3 class="card-title">Grilled Chicken</h3>
+                        <p class="text-muted">Succulent grilled chicken served with seasonal vegetables.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="menu-card">
+                        <h3 class="card-title">Pasta Primavera</h3>
+                        <p class="text-muted">A classic pasta dish loaded with fresh vegetables and herbs.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="menu-card">
+                        <h3 class="card-title">Chocolate Cake</h3>
+                        <p class="text-muted">Rich, moist chocolate cake — the perfect dessert.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <div class="lh-lg">
+                <p class="mb-0">Address: 123 Foodie Lane, Gourmet City</p>
+                <p class="mb-0">Email: info@deliciousbites.com</p>
+                <p class="mb-0">Phone: (123) 456-7890</p>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="text-center">
+        <p class="mb-0">&copy; 2026 Delicious Bites Restaurant</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Student Registration Form</title>
+    </head>
+    <body>
+        <h1>Student Registration Form</h1>
+        <p>Please complete all required fields marked with an asterisk (*).</p>
+        <form>
+            <fieldset>
+                <legend>Personal information</legend>
+                <label for="stuid">Student ID:* </label>
+                <input type="text" id="stuid" name="stuid" required><br><br>
+                <label for="fname">Full Name:* </label>
+                <input type="text" id="fname" name="fname" required><br><br>
+                <label for="date">Date of Birth:* </label>
+                <input type="date" id="date" name="date" required><br><br>
+                <label for="mail">Email Address:* </label>
+                <input type="email" id="mail" name="mail" required><br><br>
+                <label for="phone">Phone Number: </label>
+                <input type="text" id="phone" name="phone"><br><br>
+                <label for="gender">Gender: </label>
+                <input type="radio" id="male" name="gender" value="Male" >
+                <label for="male">Male </label>
+                <input type="radio" id="female" name="gender" value="Female">
+                <label for="female">Female </label>
+                <input type="radio" id="other" name="gender" value="Other">
+                <label for="other">Other </label>
+            </fieldset>
+            <fieldset>
+                <legend>Academic Information</legend>
+                <label for="grade">Class/Grade:* </label>
+                <select id="cars" name="cars" required>
+                    <option value="select">--Select Grade--</option>
+                    <option value="g9">Grade 9</option>
+                    <option value="g10">Grade 10</option>
+                    <option value="g11">Grade 11</option>
+                    <option value="g12">Grade 12</option>
+                </select><br><br>
+                <label for="sname">School Name:* </label>
+                <input type="text" id="sname" name="sname" required><br><br>
+                <label for="interest">Hobbies/Interests: </label>
+                <input type="checkbox" id="hobbies" name="hobbies" value="Sports">
+                <label for="hobbies">Sports </label>
+                <input type="checkbox" id="reading" name="reading" value="Reading">
+                <label for="reading">Reading </label>
+                <input type="checkbox" id="coding" name="coding" value="Coding">
+                <label for="coding">Coding </label>
+                <input type="checkbox" id="art" name="art" value="Art">
+                <label for="art">Art </label>
+                <input type="checkbox" id="music" name="music" value="Music">
+                <label for="music">Music </label>
+            </fieldset>
+            <fieldset>
+                <legend>Contact Information</legend>
+                <label for="home">Home Address:</label><br>
+                <textarea rows="4" cols="50" placeholder="Enter your full address..."></textarea><br><br>
+                <label for="pname">Parent/Guardian Name: </label>
+                <input type="text" id="pname" name="pname"><br><br>
+                <label for="guarphone">Parent/Guardian Phone: </label>
+                <input type="text" id="guarphone" name="guarphone"><br><br>
+            </fieldset>
+            <fieldset>
+                <legend>Terms and Conditions</legend>
+                <input type="checkbox" id="box" name="box">
+                <label for="box">I agree to the terms and conditions *</label>
+            </fieldset><br>
+            <input type="submit" value="Register Now">
+            <input type="reset" value="Clear Form">
+        </form>
+    </body>
+</html>

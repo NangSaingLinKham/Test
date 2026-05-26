@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Modern BMI Calculator</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background: linear-gradient(135deg, #4f46e5, #06b6d4);
+      overflow:hidden;
+    }
+
+    .bmi-card{
+      width:420px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(15px);
+      border:1px solid rgba(255,255,255,0.2);
+      border-radius:25px;
+      padding:40px 35px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      color:white;
+      animation: fadeIn 0.7s ease;
+    }
+
+    @keyframes fadeIn{
+      from{
+        opacity:0;
+        transform:translateY(20px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    .title{
+      text-align:center;
+      font-size:40px;
+      font-weight:700;
+      margin-bottom:30px;
+      letter-spacing:1px;
+    }
+
+    .form-label{
+      font-weight:500;
+      margin-bottom:8px;
+    }
+
+    .form-control{
+      height:55px;
+      border:none;
+      border-radius:15px;
+      padding-left:18px;
+      font-size:16px;
+      background: rgba(255,255,255,0.9);
+    }
+
+    .form-control:focus{
+      box-shadow:0 0 0 3px rgba(255,255,255,0.3);
+    }
+
+    .btn-calc{
+      width:100%;
+      height:55px;
+      border:none;
+      border-radius:15px;
+      background: linear-gradient(135deg,#00c6ff,#0072ff);
+      color:white;
+      font-size:18px;
+      font-weight:600;
+      transition:0.3s;
+      margin-top:10px;
+    }
+
+    .btn-calc:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 20px rgba(0,0,0,0.25);
+    }
+
+    .result-box{
+      margin-top:30px;
+      background: rgba(255,255,255,0.15);
+      border-radius:20px;
+      padding:20px;
+      text-align:center;
+    }
+
+    .result-box h2{
+      font-size:42px;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+
+    .status{
+      font-size:22px;
+      font-weight:500;
+    }
+
+    .footer-text{
+      text-align:center;
+      margin-top:18px;
+      font-size:13px;
+      opacity:0.8;
+    }
+
+    @media(max-width:480px){
+      .bmi-card{
+        width:95%;
+        padding:30px 20px;
+      }
+
+      .title{
+        font-size:32px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bmi-card">
+
+    <h1 class="title">BMI Calculator</h1>
+
+    <div class="mb-3">
+      <label class="form-label">Weight (lb)</label>
+      <input type="number" id="weight" class="form-control" placeholder="Enter your weight">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Height (feet)</label>
+      <input type="number" id="feet" class="form-control" placeholder="Feet">
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label">Height (inches)</label>
+      <input type="number" id="inches" class="form-control" placeholder="Inches">
+    </div>
+
+    <button class="btn btn-calc" onclick="calculateBMI()">
+      Calculate BMI
+    </button>
+
+    <div class="result-box">
+      <h2 id="bmiResult">0.0</h2>
+      <div class="status" id="status">Your Status</div>
+    </div>
+
+    <div class="footer-text">
+      Healthy Body • Healthy Life
+    </div>
+
+  </div>
+
+  <script>
+    function calculateBMI() {
+
+      let weight = parseFloat(document.getElementById("weight").value);
+      let feet = parseFloat(document.getElementById("feet").value);
+      let inches = parseFloat(document.getElementById("inches").value);
+
+      let totalInches = (feet * 12) + inches;
+
+      let bmi = (weight / (totalInches * totalInches)) * 703;
+
+      bmi = bmi.toFixed(1);
+
+      document.getElementById("bmiResult").innerHTML = bmi;
+
+      let status = "";
+
+      if (bmi < 18.5) {
+        status = "Underweight";
+      } 
+      else if (bmi >= 18.5 && bmi < 24.9) {
+        status = "Normal Weight";
+      } 
+      else if (bmi >= 25 && bmi < 29.9) {
+        status = "Overweight";
+      } 
+      else {
+        status = "Obese";
+      }
+
+      document.getElementById("status").innerHTML = status;
+    }
+  </script>
+
+</body>
+</html>
